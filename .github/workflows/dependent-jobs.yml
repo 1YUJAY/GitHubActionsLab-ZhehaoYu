@@ -1,0 +1,54 @@
+name: In-class Lab #4
+
+on: push
+
+jobs:
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Building step
+        uses: actions/checkout@v4
+      
+      - name: Step two of the building step
+        run: echo "Building application..."
+
+      - name: Step three of the building step
+        run: |
+          echo "Simulating build process..."
+          sleep 3
+          echo "Build complete!"
+  
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Testing step
+        uses: actions/checkout@v4
+      
+      - name: Step two of the testing step
+        run: echo "Running tests..."
+
+      - name: Step three of the testing step
+        run: |
+          echo "Simulating test execution..."
+          sleep 2
+          echo "All tests passed!"
+  
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Deploying step
+        uses: actions/checkout@v4
+      
+      - name: Step two of the deploying step
+        run: echo "Deploying application..."
+
+      - name: Step three of the deploying step
+        run: |
+          echo "Simulating deployment process..."
+          sleep 2
+          echo "Deployment successful!"
