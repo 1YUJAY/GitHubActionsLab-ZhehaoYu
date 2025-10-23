@@ -1,0 +1,73 @@
+name: Multi-Platform CI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ubuntu-job:
+    name: Ubuntu job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Print runner OS info
+        run: |
+          echo "RUNNER_OS=$RUNNER_OS"
+          echo "ImageOS=$ImageOS"
+          lsb_release -a || cat /etc/os-release || true
+
+      - name: Show OS-specific behavior (uname)
+        run: uname -a
+
+      - name: Create a simple file and display its contents
+        run: |
+          echo "Hello from Ubuntu on $(uname -r)" > hello.txt
+          cat hello.txt
+
+  windows-job:
+    name: Windows job
+    runs-on: windows-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Print runner OS info
+        shell: pwsh
+        run: |
+          Write-Host "RUNNER_OS=$Env:RUNNER_OS"
+          Write-Host "ImageOS=$Env:ImageOS"
+          $PSVersionTable
+
+      - name: Show OS-specific behavior (systeminfo)
+        shell: pwsh
+        run: |
+          systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+
+      - name: Create a simple file and display its contents
+        shell: pwsh
+        run: |
+          "Hello from Windows on $((Get-CimInstance Win32_OperatingSystem).Version)" | Set-Content -Path hello.txt
+          Get-Content hello.txt
+
+  macos-job:
+    name: macOS job
+    runs-on: macos-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Print runner OS info
+        run: |
+          echo "RUNNER_OS=$RUNNER_OS"
+          echo "ImageOS=$ImageOS"
+          sw_vers
+
+      - name: Show OS-specific behavior (uname)
+        run: uname -a
+
+      - name: Create a simple file and display its contents
+        run: |
+          echo "Hello from macOS on $(sw_vers -productVersion)" > hello.txt
+          cat hello.txt
